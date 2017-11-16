@@ -107,7 +107,7 @@ app.use(passport.session());
 require('./config/passport')(passport);
 
 //Set Static folder
-// app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, 'build')));
 
 //Use Routes
 app.use('/professors', professors);
@@ -118,9 +118,9 @@ app.get('/', (req, res) => {
 });
 
 //Catch All Routes
-// app.all('*', (req, res) => {
-//   res.sendFile(__dirname, 'build/index.html');
-// });
+app.all('*', (req, res) => {
+  res.sendFile(__dirname, 'build/index.html');
+});
 
 //Start Server
 app.listen(port, () => {
