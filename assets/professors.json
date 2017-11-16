@@ -1,0 +1,19 @@
+{
+  "professors": [
+    {
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "test@mail.com"
+    },
+    {
+      "firstName": "Sam",
+      "lastName": "Smith",
+      "email": "test2@mail.com"
+    },
+    {
+      "firstName": "Mary",
+      "lastName": "James",
+      "email": "test3@mail.com"
+    }
+  ]
+}
