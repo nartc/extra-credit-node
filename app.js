@@ -119,7 +119,7 @@ app.get('/', (req, res) => {
 });
 
 //Catch All Routes
-app.all('/*', (req, res) => {
+app.all('*', (req, res) => {
   res.sendFile(__dirname, 'build/index.html');
 });
 
