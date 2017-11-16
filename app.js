@@ -10,7 +10,6 @@ const mongoose = require('mongoose');
 
 //Professors Catalog JSON File
 const professorsData = JSON.parse(fs.readFileSync('./assets/professors.json', 'utf8'));
-
 const Schema = mongoose.Schema;
 
 //Professor Catalog Schema
@@ -51,7 +50,7 @@ mongoose.connect(config.mongoURI, {
         } else {
           //Check Professor Catalog collection count
           ProfessorCatalog.count({}, (err, count) => {
-            if (count < professorData.professors.length) {
+            if (count < professorsData.professors.length) {
               //If Count in collection is less than data length, drop the collection
               mongoose.connection.db.dropCollection('professor-catalog');
               //Re-insert
