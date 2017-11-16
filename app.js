@@ -125,7 +125,7 @@ app.all('*', (req, res) => {
 
 //Start Server
 app.listen(port, () => {
-  if (port === 1110) {
+  if (port === 3000) {
     console.log(`Server started on http://localhost:${port}`);
   } else {
     console.log(`Server started on ${port}`);
