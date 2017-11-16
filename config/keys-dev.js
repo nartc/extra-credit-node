@@ -1,6 +1,4 @@
-const databaseName = 'extra-cred-dev';
-
 module.exports = {
-  mongoURI : `mongodb://localhost:27017/${databaseName}`,
-  secretKEY : "mySecret"
+  mongoURI : process.env.MONGO_URI_DEV,
+  secretKEY : process.env.SECRET_KEY
 }
