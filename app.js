@@ -89,6 +89,7 @@ const port = process.env.PORT || 3000;
 
 //Load Routes
 const professors = require('./routes/professors');
+const students = require('./routes/students');
 
 //CORS Middleware
 app.use(cors());
@@ -111,6 +112,7 @@ app.use(express.static(path.join(__dirname, 'build')));
 
 //Use Routes
 app.use('/professors', professors);
+app.use('/students', students);
 
 //Testing index route
 app.get('/', (req, res) => {

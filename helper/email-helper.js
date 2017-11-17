@@ -16,7 +16,7 @@ const mailTransporter = nodeMailer.createTransport({
 });
 
 //Init Mail Options
-module.exports.sendMail = (token, user, callback) => {
+module.exports.sendMail = (token, user, tempPassword, callback) => {
   const verifyUrl = `http://localhost:3000/professors/verify?token=${token}`;
   let htmlBody = `
   <p>Hi Professor ${user.name},</p>
@@ -25,7 +25,7 @@ module.exports.sendMail = (token, user, callback) => {
   <p> Please click the link below:</p>
   <a target="_blank" href="${verifyUrl}">${verifyUrl}</a>
   <br>
-  <p> Your temporary password: <strong>${user.password}</strong></p>
+  <p> Your temporary password: <strong>${tempPassword}</strong></p>
   <br>
   <p> Thank you </p>
 `;

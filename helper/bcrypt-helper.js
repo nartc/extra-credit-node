@@ -1,13 +1,8 @@
 const bcrypt = require('bcryptjs');
 
 module.exports.hashSalt = (password) => {
-  bcrypt.genSalt(10, (err, salt) => {
-    if (err) console.error(`Error generating salt: ${err}`);
-    bcrypt.hash(password, salt, (err, hash) => {
-      if (err) console.error(`Error hashing password: ${err}`);
-      return hash;
-    });
-  });
+  const salt = bcrypt.genSaltSync(10);
+  return bcrypt.hashSync(password, salt);
 }
 
 module.exports.comparePasswords = (candidatePassword, hash, callback) => {

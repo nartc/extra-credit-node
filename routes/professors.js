@@ -6,6 +6,7 @@ const passport = require('passport');
 const config = require("../config/keys");
 const emailHelper = require("../helper/email-helper");
 const momentHelper = require('../helper/moment-helper');
+const bcryptHelper = require('../helper/bcrypt-helper');
 const Professor = require("../models/Professor");
 const ProfessorCatalog = require("../app");
 
@@ -37,7 +38,8 @@ router.post('/init', (req, res) => {
       //Check to see if this professor's verified
       if (!professor.verified) {
         //Change this professor's temp password if they're not verified
-        professor.password = Professor.generatePassword();
+        const tempPassword = Professor.generatePassword();
+        professor.password = bcryptHelper.hashSalt(tempPassword);
         //Save this professor in db
         professor.save((err, savedProfessor) => {
           if (err) {
@@ -67,7 +69,7 @@ router.post('/init', (req, res) => {
 
             //Assign JWT Token to a Variable
             const initToken = token;
-            emailHelper.sendMail(initToken, savedProfessor, (err, info) => {
+            emailHelper.sendMail(initToken, savedProfessor, tempPassword, (err, info) => {
               if (err) console.error('ERROR sending email: ', err);
             });
           });
@@ -121,7 +123,8 @@ router.post('/init', (req, res) => {
             const initToken = token;
 
             //Give the Professor new random password
-            newProfessor.password = Professor.generatePassword();
+            const tempPassword = Professor.generatePassword();
+            newProfessor.password = bcryptHelper.hashSalt(tempPassword);
 
             //Save newProfessor in db
             newProfessor.save((err, savedProfessor) => {
@@ -135,7 +138,7 @@ router.post('/init', (req, res) => {
               }
 
               //Send email
-              emailHelper.sendMail(initToken, savedProfessor, (err, info) => {
+              emailHelper.sendMail(initToken, savedProfessor, tempPassword, (err, info) => {
                 if (err) console.error('ERROR sending email: ', err);
               });
 
