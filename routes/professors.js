@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const passport = require('passport');
+
 const config = require("../config/keys");
 const emailHelper = require("../helper/email-helper");
+const momentHelper = require('../helper/moment-helper');
 const Professor = require("../models/Professor");
 const ProfessorCatalog = require("../app");
 
@@ -267,18 +269,24 @@ router.post('/login', (req, res) => {
             });
           }
 
-          res.status(200).json({
-            success: true,
-            title: 'success',
-            message: 'Successfully logged in',
-            authToken: `JWT ${token}`,
-            response: {
-              _id: professor._id,
-              email: professor.email,
-              firstName: professor.firstName,
-              lastName: professor.lastName,
-              verified: professor.verified
-            }
+          professor.lastVisited = momentHelper.getToday();
+          professor.save((err, professor) => {
+            if (err) console.error(`Error saving professor: ${err}`);
+
+            res.status(200).json({
+              success: true,
+              title: 'success',
+              message: 'Successfully logged in',
+              authToken: `JWT ${token}`,
+              response: {
+                _id: professor._id,
+                email: professor.email,
+                firstName: professor.firstName,
+                lastName: professor.lastName,
+                lastVisited: professor.lastVisited,
+                verified: professor.verified
+              }
+            });
           });
         });
       }

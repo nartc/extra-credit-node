@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
 const Schema = mongoose.Schema;
+
+const bcryptHelper = require('../helper/bcrypt-helper');
 
 const ProfessorSchema = new Schema({
   firstName: String,
@@ -52,24 +53,11 @@ module.exports.getProfByEmail = (email, callback) => {
 }
 
 module.exports.comparePasswords = (candidatePassword, hashPassword, callback) => {
-  bcrypt.compare(candidatePassword, hashPassword, (err, isMatched) => {
-    if (err) {
-      return console.error(`Error comparing password ${err}`);
-    }
-
-    callback(null, isMatched);
-  });
+  bcryptHelper.comparePasswords(candidatePassword, hash, callback);
 }
 
 module.exports.changePassword = (id, newPassword, callback) => {
-  bcrypt.genSalt(10, (err, salt) => {
-    if (err) console.error(`Error generating salt ${err}`);
-    bcrypt.hash(newPassword, salt, (err, hash) => {
-      if (err) console.error(`Error hashing new password ${err}`);
-      newPassword = hash;
-
-      Professor.findByIdAndUpdate(id, {$set: {password: newPassword}}, {new: true})
-        .exec(callback);
-    });
-  });
+  newPassword = bcryptHelper.hashSalt(newPassword);
+  Professor.findByIdAndUpdate(id, {$set: {password: newPassword}}, {new: true})
+  .exec(callback);
 }
