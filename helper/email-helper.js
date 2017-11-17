@@ -17,7 +17,7 @@ const mailTransporter = nodeMailer.createTransport({
 
 //Init Mail Options
 module.exports.sendMail = (token, user, callback) => {
-  const verifyUrl = `http://localhost:4200/professors/verify?token=${token}`;
+  const verifyUrl = `http://localhost:3000/professors/verify?token=${token}`;
   let htmlBody = `
   <p>Hi Professor ${user.name},</p>
   <br>

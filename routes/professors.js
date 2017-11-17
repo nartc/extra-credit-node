@@ -20,7 +20,7 @@ router.post('/init', (req, res) => {
   };
 
   //Check if there's already a professor with this email in the db
-  Professor.getProfByEmail(emailQuery, (err, professor) => {
+  Professor.getProfByEmail(emailInput, (err, professor) => {
     if (err) {
       return res.status(500).json({
         success: false,
@@ -211,6 +211,123 @@ router.get('/verify', (req, res) => {
       message: 'Token is missing'
     });
   }
+});
+
+//Login 
+router.post('/login', (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  Professor.getProfByEmail(email, (err, professor) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        title: 'error',
+        message: 'Error fetching Professor by Email',
+        error: err
+      });
+    }
+
+    if (!professor) {
+      return res.status(400).json({
+        success: false,
+        title: 'error',
+        message: 'Please check your login credentials.'
+      });
+    }
+
+    Professor.comparePasswords(password, professor.password, (err, isMatched) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          title: 'error',
+          message: 'Error comparing passwords',
+          error: err
+        });
+      }
+
+      if (!isMatched) {
+        return res.status(400).json({
+          succes: false,
+          title: 'error',
+          message: 'Please check your login credentials.'
+        });
+      } else {
+        const payload = {
+          professor: professor
+        };
+
+        jwt.sign(payload, config.secretKEY, jwtOptions, (err, token) => {
+          if (err) {
+            return res.status(500).json({
+              success: false,
+              title: 'error',
+              message: 'Error signing payload with JWT',
+              error: err
+            });
+          }
+
+          res.status(200).json({
+            success: true,
+            title: 'success',
+            message: 'Successfully logged in',
+            authToken: `JWT ${token}`,
+            response: {
+              _id: professor._id,
+              email: professor.email,
+              firstName: professor.firstName,
+              lastName: professor.lastName,
+              verified: professor.verified
+            }
+          });
+        });
+      }
+    });
+  });
+});
+
+//Change Password
+router.put('/change-password', passport.authenticate('jwt', {session: false}), (req, res) => {
+  const candidatePassword = req.body.candidatePassword;
+  const currentPassword = req.professor.password;
+  const newPassword = req.body.newPassword;
+
+  Professor.comparePasswords(candidatePassword, currentPassword, (err, isMatched) => {
+    if (err) {
+      return res.status(500).json({
+        success: false,
+        title: 'error',
+        message: 'Error comparing passwords',
+        error: err
+      });
+    }
+
+    if (!isMatched) {
+      return res.status(400).json({
+        success: false,
+        title: 'error',
+        message: 'Password does not match'
+      });
+    } else {
+      Professor.changePassword(req.professor._id, newPassword, (err, professor) => {
+        if (err) {
+          return res.status(500).json({
+            success: false,
+            title: 'error',
+            message: 'Error changing passwords',
+            error: err
+          });
+        }
+
+        res.status(200).json({
+          success: true,
+          title: 'success',
+          message: 'Password changed successfully',
+          professor: professor
+        });
+      });
+    }
+  });
 });
 
 module.exports = router;

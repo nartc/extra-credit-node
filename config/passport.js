@@ -11,6 +11,6 @@ module.exports = (passport) => {
   options.secretOrKey = config.secretKEY;
 
   passport.use(new JwtStrategy(options, (jwt_payload, done) => {
-   //TODO
+    console.log('JWT Payload: ', jwt_payload);
   }));
 }
