@@ -44,6 +44,7 @@ router.post('/register', (req, res) => {
 
 //Login
 router.post('/login', (req, res) => {
+  console.log(req.body);
   const email = req.body.email;
   const password = req.body.password;
 
@@ -52,7 +53,7 @@ router.post('/login', (req, res) => {
       return res.status(500).json({
         success: false,
         title: 'error',
-        message: 'Error fetching student by email',
+        message: 'Error fetching student by email', 
         error: err
       });
     }
