@@ -45,8 +45,8 @@ router.post('/register', (req, res) => {
 //Login
 router.post('/login', (req, res) => {
   console.log(req.body);
-  const email = req.body.user.email;
-  const password = req.body.user.password;
+  const email = req.body.email;
+  const password = req.body.password;
 
   Student.getStudentByEmail(email, (err, student) => {
     if (err) {
