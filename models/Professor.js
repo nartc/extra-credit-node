@@ -24,7 +24,11 @@ const ProfessorSchema = new Schema({
     type: Date,
     default: Date.now()
   },
-  lastVisited: Date
+  lastVisited: Date,
+  classes: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Class'
+  }]
 });
 
 function toLower(str) {
