@@ -29,7 +29,7 @@ router.post('/register', (req, res) => {
         success: false,
         title: 'error',
         message: 'Error registering new student',
-        error: err.errmsg
+        error: err
       });
     }
 
@@ -54,7 +54,7 @@ router.post('/login', (req, res) => {
         success: false,
         title: 'error',
         message: 'Error fetching student by email', 
-        error: err.errmsg
+        error: err
       });
     }
 
