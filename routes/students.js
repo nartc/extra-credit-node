@@ -29,7 +29,7 @@ router.post('/register', (req, res) => {
         success: false,
         title: 'error',
         message: 'Error registering new student',
-        error: err
+        error: err.errmsg
       });
     }
 
@@ -54,7 +54,7 @@ router.post('/login', (req, res) => {
         success: false,
         title: 'error',
         message: 'Error fetching student by email', 
-        error: err
+        error: err.errmsg
       });
     }
 
@@ -62,8 +62,7 @@ router.post('/login', (req, res) => {
       return res.status(400).json({
         success: false,
         title: 'error',
-        message: 'Please check your credentials',
-        error: err
+        message: 'Please check your credentials'
       });
     }
 
