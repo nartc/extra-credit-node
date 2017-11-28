@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
+const cors = require('cors');
 
 const config = require("../config/keys");
 const emailHelper = require("../helper/email-helper");
@@ -16,7 +17,7 @@ const jwtOptions = {
 };
 
 //Init Professor Account
-router.post('/init', (req, res) => {
+router.post('/init', cors(), (req, res) => {
   console.log(req.body);
   const emailInput = req.body.email;
   const emailQuery = {
