@@ -153,7 +153,11 @@ router.post('/init', (req, res) => {
             });
           });
         } else { //There's no match
-          return res.status(400).destroy();
+          return res.status(500).json({
+            success: false,
+            title: 'error',
+            message: 'Error Professor Account Initialization (6)'
+          });
         }
       });
     }
