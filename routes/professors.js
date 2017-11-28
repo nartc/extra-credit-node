@@ -165,10 +165,10 @@ router.post('/init', (req, res) => {
 });
 
 //Verify TOKEN
-router.get('/verify', (req, res) => {
+router.post('/verify', (req, res) => {
   //Check and assign TOKEN from queryParam
   const queryToken = req.query.token ? req.query.token : null;
-
+  const emailInput = req.body.email;
   //Check queryToken
   if (queryToken !== null) {
     jwt.verify(queryToken, config.secretKEY, (err, decodedToken) => {
@@ -217,7 +217,7 @@ router.get('/verify', (req, res) => {
   } else { //QueryToken is null
     return res.status(400).json({
       success: false,
-      title: 'unauthorized',
+      title: 'error',
       message: 'Token is missing'
     });
   }
