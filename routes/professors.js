@@ -25,7 +25,6 @@ router.post('/init', (req, res) => {
 
   //Check if there's already a professor with this email in the db
   Professor.getProfByEmail(emailInput, (err, professor) => {
-    console.log('iaminhere');
     if (err) {
       return res.status(500).json({
         success: false,

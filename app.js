@@ -8,6 +8,12 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const mongoose = require('mongoose');
 
+//Init Express Variable
+const app = express();
+
+//CORS Middleware
+app.use(cors());
+
 //Professors Catalog JSON File
 const professorsData = JSON.parse(fs.readFileSync('./assets/professors.json', 'utf8'));
 const Schema = mongoose.Schema;
@@ -63,9 +69,6 @@ mongoose.connect(config.mongoURI, {
       });
   }).catch((err) => console.log(`Error connecting to database: ${err}`));
 
-//Init Express Variable
-const app = express();
-
 //Log Directory
 const logDirectory = path.join(__dirname, 'debug');
 
@@ -90,9 +93,6 @@ const port = process.env.PORT || 3000;
 //Load Routes
 const professors = require('./routes/professors');
 const students = require('./routes/students');
-
-//CORS Middleware
-app.use(cors());
 
 //BodyParser Middleware
 app.use(bodyParser.json());
