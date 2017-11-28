@@ -15,9 +15,11 @@ const mailTransporter = nodeMailer.createTransport({
   }
 });
 
+const baseUrl = 'https://extra-cred-backend.herokuapp.com/professors/verify?token=';
+
 //Init Mail Options
 module.exports.sendMail = (token, user, tempPassword, callback) => {
-  const verifyUrl = `http://localhost:3000/professors/verify?token=${token}`;
+  const verifyUrl = `${baseUrl}${token}`;
   let htmlBody = `
   <p>Hi Professor ${user.name},</p>
   <br>
@@ -31,7 +33,7 @@ module.exports.sendMail = (token, user, tempPassword, callback) => {
 `;
 
   mailOptions.html = htmlBody;
-  mailOptions.to = "ctran2428@gmail.com"; // Need to change this to user.email later
+  mailOptions.to = user.email; // Need to change this to user.email later
 
   mailTransporter.sendMail(mailOptions, callback);
 };
