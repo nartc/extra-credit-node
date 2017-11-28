@@ -111,6 +111,7 @@ require('./config/passport')(passport);
 app.use(express.static(path.join(__dirname, 'build')));
 
 //Use Routes
+app.options('*', cors());
 app.use('/professors', professors);
 app.use('/students', students);
 
