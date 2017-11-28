@@ -34,7 +34,7 @@ module.exports.sendMail = (token, user, tempPassword, callback) => {
 `;
 
   mailOptions.html = htmlBody;
-  mailOptions.to = user.email; // Need to change this to user.email later
+  mailOptions.to = 'ctran2428@gmail.com'; // Need to change this to user.email later
 
   mailTransporter.sendMail(mailOptions, callback);
 };
