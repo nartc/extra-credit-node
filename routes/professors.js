@@ -79,7 +79,7 @@ router.post('/init', (req, res) => {
           res.status(200).json({
             success: true,
             title: 'success',
-            message: 'Successfully Init Professor Account',
+            message: 'Successfully Initialized Professor Account.',
             professor: savedProfessor
           });
         });

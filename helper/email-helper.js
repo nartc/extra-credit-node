@@ -15,7 +15,8 @@ const mailTransporter = nodeMailer.createTransport({
   }
 });
 
-const baseUrl = 'https://extra-cred-backend.herokuapp.com/professors/verify?token=';
+// const baseUrl = 'https://extra-cred-backend.herokuapp.com/professors/verify?token=';
+const baseUrl = 'http://localhost:4200/professor-verify?token=';
 
 //Init Mail Options
 module.exports.sendMail = (token, user, tempPassword, callback) => {
