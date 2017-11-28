@@ -17,6 +17,7 @@ const jwtOptions = {
 
 //Init Professor Account
 router.post('/init', (req, res) => {
+  console.log(req.body);
   const emailInput = req.body.email;
   const emailQuery = {
     email: emailInput
@@ -28,7 +29,7 @@ router.post('/init', (req, res) => {
       return res.status(500).json({
         success: false,
         title: "error",
-        message: "Error Professor Account Initialization",
+        message: "Error Professor Account Initialization (1)",
         erorr: err
       });
     }
@@ -46,7 +47,7 @@ router.post('/init', (req, res) => {
             return res.status(500).json({
               success: false,
               title: "error",
-              message: "Error Professor Account Initialization",
+              message: "Error Professor Account Initialization (2)",
               erorr: err
             });
           }
@@ -62,7 +63,7 @@ router.post('/init', (req, res) => {
               return res.status(500).json({
                 success: false,
                 title: "error",
-                message: "Error Professor Account Initialization",
+                message: "Error Professor Account Initialization (3)",
                 erorr: err
               });
             }
@@ -114,7 +115,7 @@ router.post('/init', (req, res) => {
               return res.status(500).json({
                 success: false,
                 title: "error",
-                message: "Error Professor Account Initialization",
+                message: "Error Professor Account Initialization (4)",
                 erorr: err
               });
             }
@@ -132,7 +133,7 @@ router.post('/init', (req, res) => {
                 return res.status(500).json({
                   success: false,
                   title: "error",
-                  message: "Error Professor Account Initialization",
+                  message: "Error Professor Account Initialization (5)",
                   erorr: err
                 });
               }
