@@ -110,7 +110,7 @@ router.post('/init', (req, res) => {
           });
 
           //Sign the payload with JWT
-          jwt.sign(payload, config.secretKEY.jwtOptions, (err, token) => {
+          jwt.sign(payload, config.secretKEY, jwtOptions, (err, token) => {
             if (err) {
               return res.status(500).json({
                 success: false,
