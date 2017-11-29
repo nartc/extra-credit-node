@@ -181,38 +181,46 @@ router.post('/verify', (req, res) => {
         });
       }
 
-      Professor.getProfByEmail(decodedToken.professor.email, (err, professor) => {
-        if (err) {
-          return res.status(500).json({
-            success: false,
-            title: "error",
-            message: "Error Fetching Prof by Email",
-            erorr: err
-          });
-        }
-
-        //Change professor's verification status
-        professor.verified = true;
-
-        //Save to db and response back to frontend
-        professor.save((err, savedProfessor) => {
+      if (emailInput === decodedToken.professor.email) {
+        Professor.getProfByEmail(decodedToken.professor.email, (err, professor) => {
           if (err) {
             return res.status(500).json({
               success: false,
               title: "error",
-              message: "Error Saving Professor",
+              message: "Error Fetching Prof by Email",
               erorr: err
             });
           }
 
-          res.status(200).json({
-            success: true,
-            title: 'success',
-            message: 'Verified Successfully',
-            professor: savedProfessor
+          //Change professor's verification status
+          professor.verified = true;
+
+          //Save to db and response back to frontend
+          professor.save((err, savedProfessor) => {
+            if (err) {
+              return res.status(500).json({
+                success: false,
+                title: "error",
+                message: "Error Saving Professor",
+                erorr: err
+              });
+            }
+
+            res.status(200).json({
+              success: true,
+              title: 'success',
+              message: 'Verified Successfully',
+              professor: savedProfessor
+            });
           });
         });
-      });
+      } else {
+        return res.status(400).json({
+          success: false,
+          title: "error",
+          message: "Not Authorized"
+        });
+      }
     });
   } else { //QueryToken is null
     return res.status(400).json({
@@ -303,7 +311,9 @@ router.post('/login', (req, res) => {
 });
 
 //Change Password
-router.put('/change-password', passport.authenticate('jwt', {session: false}), (req, res) => {
+router.put('/change-password', passport.authenticate('jwt', {
+  session: false
+}), (req, res) => {
   const candidatePassword = req.body.candidatePassword;
   const currentPassword = req.professor.password;
   const newPassword = req.body.newPassword;
