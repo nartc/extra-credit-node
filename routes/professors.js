@@ -192,6 +192,14 @@ router.post('/verify', (req, res) => {
             });
           }
 
+          if (!professor) {
+            return res.status(500).json({
+              success: false,
+              title: "error",
+              message: "There is no Professor by that email in our system"
+            });
+          }
+
           //Change professor's verification status
           professor.verified = true;
 
