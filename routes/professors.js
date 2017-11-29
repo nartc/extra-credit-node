@@ -153,22 +153,26 @@ router.post('/verify', (req, res) => {
             resolveErrorResponse(res, 'There is no Professor by that email in our system', 400);
           }
 
-          //Change professor's verification status
-          professor.verified = true;
+          if (professor.verified) {
+            resolveErrorResponse(res, 'You are already verified', 500);
+          } else {
+            //Change professor's verification status
+            professor.verified = true;
 
-          //Save to db and response back to frontend
-          professor.save((err, savedProfessor) => {
-            if (err) {
-              resolveErrorResponse(res, 'Error Saving Professor', 500, err);
-            }
+            //Save to db and response back to frontend
+            professor.save((err, savedProfessor) => {
+              if (err) {
+                resolveErrorResponse(res, 'Error Saving Professor', 500, err);
+              }
 
-            res.status(200).json({
-              success: true,
-              title: 'success',
-              message: 'Verified Successfully',
-              professor: savedProfessor
+              res.status(200).json({
+                success: true,
+                title: 'success',
+                message: 'Verified Successfully',
+                professor: savedProfessor
+              });
             });
-          });
+          }
         });
       } else {
         resolveErrorResponse(res, 'Not Authorized', 400);
