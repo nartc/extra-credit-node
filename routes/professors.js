@@ -26,12 +26,7 @@ router.post('/init', (req, res) => {
   //Check if there's already a professor with this email in the db
   Professor.getProfByEmail(emailInput, (err, professor) => {
     if (err) {
-      return res.status(500).json({
-        success: false,
-        title: "error",
-        message: "Error Professor Account Initialization (1)",
-        erorr: err
-      });
+      resolveErrorResponse(res, 'Error Initializing Professor Account', 500, err);
     }
 
     //If there's a professor
@@ -44,12 +39,7 @@ router.post('/init', (req, res) => {
         //Save this professor in db
         professor.save((err, savedProfessor) => {
           if (err) {
-            return res.status(500).json({
-              success: false,
-              title: "error",
-              message: "Error Professor Account Initialization (2)",
-              erorr: err
-            });
+            resolveErrorResponse(res, 'Error Initializing Professor Account', 500, err);
           }
 
           //If savedProfessor, init payload for JWT
@@ -60,12 +50,7 @@ router.post('/init', (req, res) => {
           //Generate JWT Token
           jwt.sign(payload, config.secretKEY, jwtOptions, (err, token) => {
             if (err) {
-              return res.status(500).json({
-                success: false,
-                title: "error",
-                message: "Error Professor Account Initialization (3)",
-                erorr: err
-              });
+              resolveErrorResponse(res, 'Error Initializing Professor Account', 500, err);
             }
 
             //Assign JWT Token to a Variable
@@ -85,11 +70,7 @@ router.post('/init', (req, res) => {
         });
       } else {
         //If the professor's already verified
-        return res.status(400).json({
-          success: false,
-          title: 'error',
-          message: 'You are already verified'
-        });
+        resolveErrorResponse(res, 'You are already verified', 400);
       }
     } else { //If there's not a professor with the email input
       //Check if the email is belonged to any of the professor in our professor's catalog
@@ -112,12 +93,7 @@ router.post('/init', (req, res) => {
           //Sign the payload with JWT
           jwt.sign(payload, config.secretKEY, jwtOptions, (err, token) => {
             if (err) {
-              return res.status(500).json({
-                success: false,
-                title: "error",
-                message: "Error Professor Account Initialization (4)",
-                erorr: err
-              });
+              resolveErrorResponse(res, 'Error Professor Account Initialization', 500, err);
             }
 
             //Save the JWT Token
@@ -130,12 +106,7 @@ router.post('/init', (req, res) => {
             //Save newProfessor in db
             newProfessor.save((err, savedProfessor) => {
               if (err) {
-                return res.status(500).json({
-                  success: false,
-                  title: "error",
-                  message: "Error Professor Account Initialization (5)",
-                  erorr: err
-                });
+                resolveErrorResponse(res, 'Error Professor Account Initialization', 500, err);
               }
 
               //Send email
@@ -153,11 +124,7 @@ router.post('/init', (req, res) => {
             });
           });
         } else { //There's no match
-          return res.status(500).json({
-            success: false,
-            title: 'error',
-            message: 'Error Professor Account Initialization (6)'
-          });
+          resolveErrorResponse(res, 'Error Professor Account Initialization', 500);
         }
       });
     }
@@ -173,31 +140,17 @@ router.post('/verify', (req, res) => {
   if (queryToken !== null) {
     jwt.verify(queryToken, config.secretKEY, (err, decodedToken) => {
       if (err) {
-        return res.status(500).json({
-          success: false,
-          title: "error",
-          message: "Error Token Verification",
-          erorr: err
-        });
+        resolveErrorResponse(res, 'Error Token Verification', 500, err);
       }
 
       if (emailInput === decodedToken.professor.email) {
         Professor.getProfByEmail(decodedToken.professor.email, (err, professor) => {
           if (err) {
-            return res.status(500).json({
-              success: false,
-              title: "error",
-              message: "Error Fetching Prof by Email",
-              erorr: err
-            });
+            resolveErrorResponse(res, 'Error Fetching Prof by Email', 500, err);
           }
 
           if (!professor) {
-            return res.status(500).json({
-              success: false,
-              title: "error",
-              message: "There is no Professor by that email in our system"
-            });
+            resolveErrorResponse(res, 'There is no Professor by that email in our system', 400);
           }
 
           //Change professor's verification status
@@ -206,12 +159,7 @@ router.post('/verify', (req, res) => {
           //Save to db and response back to frontend
           professor.save((err, savedProfessor) => {
             if (err) {
-              return res.status(500).json({
-                success: false,
-                title: "error",
-                message: "Error Saving Professor",
-                erorr: err
-              });
+              resolveErrorResponse(res, 'Error Saving Professor', 500, err);
             }
 
             res.status(200).json({
@@ -223,19 +171,11 @@ router.post('/verify', (req, res) => {
           });
         });
       } else {
-        return res.status(400).json({
-          success: false,
-          title: "error",
-          message: "Not Authorized"
-        });
+        resolveErrorResponse(res, 'Not Authorized', 400);
       }
     });
   } else { //QueryToken is null
-    return res.status(400).json({
-      success: false,
-      title: 'error',
-      message: 'Token is missing'
-    });
+    resolveErrorResponse(res, 'Token is missing', 400);
   }
 });
 
@@ -246,38 +186,20 @@ router.post('/login', (req, res) => {
 
   Professor.getProfByEmail(email, (err, professor) => {
     if (err) {
-      return res.status(500).json({
-        success: false,
-        title: 'error',
-        message: 'Error fetching Professor by Email',
-        error: err
-      });
+      resolveErrorResponse(res, 'Error fetching Professor by Email', 500, err);
     }
 
     if (!professor) {
-      return res.status(400).json({
-        success: false,
-        title: 'error',
-        message: 'Please check your login credentials.'
-      });
+      resolveErrorResponse(res, 'Please check your login credentials.', 400);
     }
 
     Professor.comparePasswords(password, professor.password, (err, isMatched) => {
       if (err) {
-        return res.status(500).json({
-          success: false,
-          title: 'error',
-          message: 'Error comparing passwords',
-          error: err
-        });
+        resolveErrorResponse(res, 'Error comparing passwords', 500, err);
       }
 
       if (!isMatched) {
-        return res.status(400).json({
-          succes: false,
-          title: 'error',
-          message: 'Please check your login credentials.'
-        });
+        resolveErrorResponse(res, 'Please check your login credentials.', 400);
       } else {
         const payload = {
           professor: professor
@@ -285,12 +207,7 @@ router.post('/login', (req, res) => {
 
         jwt.sign(payload, config.secretKEY, jwtOptions, (err, token) => {
           if (err) {
-            return res.status(500).json({
-              success: false,
-              title: 'error',
-              message: 'Error signing payload with JWT',
-              error: err
-            });
+            resolveErrorResponse(res, 'Error signing payload with JWT', 500, err);
           }
 
           professor.lastVisited = momentHelper.getToday();
@@ -328,29 +245,15 @@ router.put('/change-password', passport.authenticate('jwt', {
 
   Professor.comparePasswords(candidatePassword, currentPassword, (err, isMatched) => {
     if (err) {
-      return res.status(500).json({
-        success: false,
-        title: 'error',
-        message: 'Error comparing passwords',
-        error: err
-      });
+      resolveErrorResponse(res, 'Error comparing passwords', 500, err);
     }
 
     if (!isMatched) {
-      return res.status(400).json({
-        success: false,
-        title: 'error',
-        message: 'Password does not match'
-      });
+      resolveErrorResponse(res, 'Password does not match', 400);
     } else {
       Professor.changePassword(req.professor._id, newPassword, (err, professor) => {
         if (err) {
-          return res.status(500).json({
-            success: false,
-            title: 'error',
-            message: 'Error changing passwords',
-            error: err
-          });
+          resolveErrorResponse(res, 'Error changing passwords', 500, err);
         }
 
         res.status(200).json({
@@ -363,5 +266,15 @@ router.put('/change-password', passport.authenticate('jwt', {
     }
   });
 });
+
+function resolveErrorResponse(res, message, statusCode, error) {
+  error = error ? error : null;
+  return res.status(statusCode).json({
+    success: false,
+    title: "error",
+    message: message,
+    erorr: error
+  });
+}
 
 module.exports = router;
