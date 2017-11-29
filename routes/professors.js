@@ -12,7 +12,7 @@ const ProfessorCatalog = require("../app");
 
 //JWT Options
 const jwtOptions = {
-  expiresIn: 18000
+  expiresIn: 1800
 };
 
 //Init Professor Account
@@ -277,7 +277,7 @@ function resolveErrorResponse(res, message, statusCode, error) {
     success: false,
     title: "error",
     message: message,
-    erorr: error
+    error: error
   });
 }
 
