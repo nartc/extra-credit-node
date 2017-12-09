@@ -15,7 +15,7 @@ const ClassSchema = new Schema({
     required: true
   },
   events: [{
-    date: Date,
+    date: String,
     name: String,
     description: String
   }],
