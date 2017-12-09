@@ -93,6 +93,7 @@ const port = process.env.PORT || 3000;
 //Load Routes
 const professors = require('./routes/professors');
 const students = require('./routes/students');
+const classes = require('./routes/classes');
 
 //BodyParser Middleware
 app.use(bodyParser.json());
@@ -114,6 +115,7 @@ app.use(express.static(path.join(__dirname, 'build')));
 app.options('*', cors());
 app.use('/professors', professors);
 app.use('/students', students);
+app.use('/classes', classes);
 
 //Testing index route
 app.get('/', (req, res) => {

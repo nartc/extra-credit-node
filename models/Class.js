@@ -6,26 +6,38 @@ const ClassSchema = new Schema({
     type: String,
     required: true
   },
-  identifier: {
+  // identifier: { 
+  //   type: String,
+  //   required: true
+  // },
+  description: {
     type: String,
     required: true
   },
-  section: {
-    type: String,
-    required: true
-  },
-  professor: {
-    type: Schema.Types.ObjectId,
-    ref: 'Professor'
-  },
-  students: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Student'
+  events: [{
+    date: Date,
+    name: String,
+    description: String
   }],
-  submissions: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Submission'
-  }]
+  professor: {
+    type: String
+  }
+  // professor: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'Professor'
+  // },
+  // students: [{
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'Student'
+  // }],
+  // submissions: [{
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'Submission'
+  // }]
 });
 
 const Class = module.exports = mongoose.model('Class', ClassSchema);
+
+module.exports.addClass = (newClass, callback) => {
+  newClass.save(callback);
+}
