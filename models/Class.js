@@ -39,5 +39,6 @@ const ClassSchema = new Schema({
 const Class = module.exports = mongoose.model('Class', ClassSchema);
 
 module.exports.addClass = (newClass, callback) => {
+  console.log(newClass);
   newClass.save(callback);
 }

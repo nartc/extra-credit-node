@@ -17,7 +17,7 @@ router.post('/', (req, res) => {
           resolveErrorResponse(res, 'Error Adding New Class', 500, err);
       }
 
-      return res.status(200).json({
+     res.status(200).json({
         success: true,
         title: 'success',
         message: 'Added Class Successfully',
